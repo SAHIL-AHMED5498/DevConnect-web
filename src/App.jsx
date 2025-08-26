@@ -1,17 +1,34 @@
 import { useState } from "react";
 import viteLogo from "/vite.svg";
 import Navbar from "./components/Navbar";
+import { BrowserRouter, Route, Routes } from "react-router";
+import Layout from "./components/Layout";
+import Login from "./components/Login";
+import Profile from "./components/Profile";
+import Body from "./components/Body";
+import { Provider } from "react-redux";
+import store from "./store/store";
+import Connection from "./components/Connection";
+import Request from "./components/Request";
 
 
 function App() {
   return (<>
-  <Navbar/>
+      <Provider store={store}>
+      <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout/>}>
+        <Route path="/" element={<Body/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/profile" element={<Profile/>}/>
+          <Route path="/connections" element={<Connection/>}/>
+          <Route path="/requests" element={<Request/>}/>
+        </Route>
 
+      </Routes>
 
-      <div className="m-2 flex justify-center items-center">
-      <h1 className="text-blue-600">Vite + React</h1>
-      <button className="bg-blue-300 m-2 p-2 active:scale-90 rounded">Click me !</button>
-    </div>
+      </BrowserRouter>
+      </Provider>
   </>
 
   );
