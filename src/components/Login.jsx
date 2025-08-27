@@ -1,137 +1,141 @@
-import  { useState } from 'react'
+import { useState } from 'react'
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../store/userSlice';
 import { useNavigate } from 'react-router';
 import { BASE_URL } from '../utils/constants';
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
-  const dispatch=useDispatch();
-  const navigate=useNavigate();
-  const [error,setError]=useState("");
-  const [email,setEmail]=useState("test1@gmail.com");
-  const [pass,setPass]=useState("Test1@123");
-  const [name,setName]=useState("");
-  const [age,setAge]=useState("");
-  const [isUser,setIsUser]=useState(true);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("test1@gmail.com");
+  const [pass, setPass] = useState("Test1@123");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [isUser, setIsUser] = useState(true);
 
-  const handleGuestLogin=async()=>{
-
-      const res=await axios.post(`${BASE_URL}/signIn`,{
-      email:"test1@gmail.com",
-      password:"Test1@123"
-      
-    },{withCredentials:true})
-      // console.log(res);
-    dispatch(addUser(res.data));
-    navigate("/");
-
-
-  }
-
-  const handleIsUser=()=>{
-    setIsUser(!isUser)
-  }
-
-  const handleClick=async()=>{
-    // console.log(email);
-    // console.log(pass);
-try{
-  if(isUser){
-
-      const res=await axios.post(`${BASE_URL}/signIn`,{
-      email:email,
-      password:pass
-      
-    },{withCredentials:true})
-      // console.log(res);
-    dispatch(addUser(res.data));
-    navigate("/");
-  }
-  else{
-    const res=await axios.post(`${BASE_URL}/signUp`,{email:email,password:pass,name:name,age:age, skills: "[`skill1`,`skill2`,`skill3`]", about:"new user", profileImg: "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"},{withCredentials:true})
-    console.log(res);
-    dispatch(addUser(res.data));
-    navigate("/");
-  }
-  
-
-
-  
-
-}
-catch(err){
-    if (err.response) {
-      // Server responded with a status outside 2xx
-      console.error("Status:", err.response.status);
-      console.error("Data:", err.response.data); 
-      setError(err.response.data);
-      
-    // your actual error message from backend
-      console.error("Headers:", err.response.headers);
-    } else if (err.request) {
-      // Request made but no response received
-      console.error("No response received:", err.request);
-    } else {
-      // Something else happened
-      console.error("Error setting up request:", err.message);
+  const handleGuestLogin = async () => {
+    try {
+      const res = await axios.post(`${BASE_URL}/signIn`, {
+        email: "test1@gmail.com",
+        password: "Test1@123"
+      }, { withCredentials: true });
+      dispatch(addUser(res.data));
+      toast.success("Logged in as Guest");
+      navigate("/");
+    } catch (err) {
+      toast.error("Guest login failed");
     }
-}
-  
   }
 
+  const handleIsUser = () => setIsUser(!isUser);
+
+  const handleClick = async () => {
+    try {
+      if (isUser) {
+        const res = await axios.post(`${BASE_URL}/signIn`, {
+          email: email,
+          password: pass
+        }, { withCredentials: true });
+        dispatch(addUser(res.data));
+        toast.success("Login Successful");
+        navigate("/");
+      } else {
+        const res = await axios.post(`${BASE_URL}/signUp`, {
+          email: email,
+          password: pass,
+          name: name,
+          age: age,
+          skills: "[`skill1`,`skill2`,`skill3`]",
+          about: "new user",
+          profileImg: "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+        }, { withCredentials: true });
+        dispatch(addUser(res.data));
+        toast.success("Signup Successful");
+        navigate("/");
+      }
+    } catch (err) {
+      setError(err.response?.data || "Something went wrong");
+      toast.error("Authentication Failed");
+    }
+  }
 
   return (
-    <div className='w-screen h-screen items-start flex justify-center sm:mt-4'>
+    <div className="w-screen h-screen flex items-center justify-center bg-zinc-100">
+      <Toaster position="top-center" reverseOrder={false} />
 
-    <div className="card w-96 bg-base-200 card-lg shadow-sm flex items-center justify-center">
+      <div className="backdrop-blur-md bg-zinc-100 border border-white/40 shadow-2xl rounded-sm w-96 md:w-[400px] p-6">
+        <h2 className="text-3xl font-extrabold text-blue-300 text-center mb-6 tracking-tight">
+          {isUser ? "Welcome Back 👋" : "Create Account ✨"}
+        </h2>
 
+        <div className="space-y-4">
+          {!isUser && (
+            <>
+              <input
+                type="text"
+                className="input input-bordered w-full rounded-xl"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+              <input
+                type="text"
+                className="input input-bordered w-full rounded-xl"
+                placeholder="Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+            </>
+          )}
 
+          <input
+            type="text"
+            className="input input-bordered w-full rounded-xl"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            className="input input-bordered w-full rounded-xl"
+            placeholder="Password"
+            value={pass}
+            onChange={(e) => setPass(e.target.value)}
+          />
+        </div>
 
-  <div className="card-body flex flex-col items-center justify-center">
+        <div className="flex flex-col gap-3 mt-6">
+          <button
+            onClick={handleClick}
+            className="btn w-full bg-gradient-to-r from-blue-500 to-zinc-500 border-0 text-white rounded-xl hover:opacity-90 transition active:scale-95"
+          >
+            {isUser ? "Login" : "Sign Up"}
+          </button>
+          <button
+            onClick={handleGuestLogin}
+            className="btn w-full bg-gradient-to-r from-blue-400 to-zinc-400 border-0 text-white rounded-xl hover:opacity-90 transition active:scale-95"
+          >
+            Guest Login
+          </button>
+        </div>
 
-    <legend className="fieldset-legend">{(isUser)?"Login":"Sign up"}</legend>
+        {error && <p className="mt-3 text-sm font-medium text-red-600 text-center">{error}</p>}
 
-
-    <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-
-  {!isUser&&<label className="label">Name</label>}
-  {!isUser&&<input type="text" className="input" placeholder="Name" value={name} onChange={(e)=>setName(e.target.value)}/>}
-
-    {!isUser&&<label className="label">Age</label>}
-  {!isUser&&<input type="text" className="input" placeholder="Age" value={age} onChange={(e)=>setAge(e.target.value)}/>}
-
-  <label className="label">Email</label>
-  <input type="text" className="input"
-  value={email}
-  onChange={(e)=>setEmail(e.target.value)}
-  placeholder="Email" />
-
-  <label className="label">Passowrd</label>
-  <input type="text" className="input"
-  value={pass}
-  onChange={(e)=>setPass(e.target.value)}
-  placeholder="Password" />
-
-  
-</fieldset>
-   
-    <div className="justify-center items-center card-actions flex flex-col">
-      <button className="btn btn-primary active:scale-95" onClick={handleClick}>{(isUser)?"Login":"SignUp"}</button>
-      <button className="btn btn-accent active:scale-95" onClick={handleGuestLogin}>guest login</button>
-    </div>
-    {error&& <p className='font-semibold text-sm text-red-600'>{error}</p>}
-    {isUser&&<p className='cursor-pointer' onClick={handleIsUser}>not a user? <span className='text-blue-400 font-bold'>Sign Up</span></p>}
-     {!isUser&&<p className='cursor-pointer' onClick={handleIsUser}>Already a user? <span className='text-blue-400 font-bold'>Sign In</span></p>}
-
-  </div>
-
-
-</div>
-
+        <p
+          onClick={handleIsUser}
+          className="mt-4 text-center text-sm text-gray-600 cursor-pointer active:scale-95 "
+        >
+          {isUser ? "Not a user? " : "Already have an account? "}
+          <span className="font-semibold text-orange-600 hover:underline">
+            {isUser ? "Sign Up" : "Sign In"}
+          </span>
+        </p>
+      </div>
     </div>
   )
 }
 
-export default Login
+export default Login;

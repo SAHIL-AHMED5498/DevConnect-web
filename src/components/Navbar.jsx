@@ -20,11 +20,11 @@ const Navbar = () => {
   
   return (
     <>
-        {user&&(<div className="navbar bg-base-200 shadow-sm">
+        <div className="navbar bg-base-300 shadow-sm">
 
   <div className="flex-1 flex items-center gap-1">
     <Link to={"/"} className="btn btn-ghost text-xl" >👨🏻‍💻Dev-Connect</Link>
-    {/* <h1 className='font-bold text-xl'>Hi👋🏻,<span className='text-amber-200'>{user.name}</span></h1> */}
+  
   </div>
 
   
@@ -77,7 +77,7 @@ const Navbar = () => {
 
 
 
-</div>)}
+</div>
     </>
   )
 }

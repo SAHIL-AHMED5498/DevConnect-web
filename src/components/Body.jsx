@@ -5,6 +5,7 @@ import Feed from './Feed';
 import axios from 'axios';
 import { BASE_URL } from '../utils/constants';
 import { addFeed } from '../store/feedSlice';
+import FeedStack from './FeedStack';
 
 const Body = () => {
   const user = useSelector(store => store.user);
@@ -48,9 +49,10 @@ const Body = () => {
   return (
     <div >
       <div className='flex flex-col justify-center items-center gap-2 mt-2'>
-        {feed.map((f, index) => (
+        <FeedStack users={feed} />
+        {/* {feed.map((f, index) => (
           <Feed key={index} user={f} />
-        ))}
+        ))} */}
       </div>
     </div>
   );

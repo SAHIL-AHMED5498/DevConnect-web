@@ -9,7 +9,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../store/userSlice";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Layout = () => {
   const user = useSelector((store) => store.user);
@@ -38,6 +38,7 @@ const Layout = () => {
 
   useEffect(() => {
     fetchUser();
+   
   }, []);
 
   return (
