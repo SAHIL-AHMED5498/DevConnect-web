@@ -9,7 +9,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import { BASE_URL } from "../utils/constants";
 import { addUser } from "../store/userSlice";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
+
 
 const Layout = () => {
   const user = useSelector((store) => store.user);
@@ -46,10 +47,11 @@ const Layout = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar />
         <Outlet />
+        <Toaster position="top-center" reverseOrder={false} />
       </div>
 
       <Footer />
-      <Toaster position="top-center" reverseOrder={false} />
+      
     </div>
   );
 };

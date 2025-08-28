@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { addUser } from '../store/userSlice';
 import { useNavigate } from 'react-router';
 import { BASE_URL } from '../utils/constants';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
+import { Eye, EyeOff } from "lucide-react"
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -16,11 +17,17 @@ const Login = () => {
   const [age, setAge] = useState("");
   const [isUser, setIsUser] = useState(true);
 
+  const [showPass,setShowPass]=useState(false);
+
+  const toggleShowPass=()=>{
+    setShowPass(!showPass);
+  }
+
   const handleGuestLogin = async () => {
     try {
       const res = await axios.post(`${BASE_URL}/signIn`, {
-        email: "test1@gmail.com",
-        password: "Test1@123"
+        email: "GUEST@gmail.com",
+        password: "Guest@123"
       }, { withCredentials: true });
       dispatch(addUser(res.data));
       toast.success("Logged in as Guest");
@@ -64,7 +71,7 @@ const Login = () => {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-zinc-100">
-      <Toaster position="top-center" reverseOrder={false} />
+      {/* <Toaster position="top-center" reverseOrder={false} /> */}
 
       <div className="backdrop-blur-md bg-zinc-100 border border-white/40 shadow-2xl rounded-sm w-96 md:w-[400px] p-6">
         <h2 className="text-3xl font-extrabold text-blue-300 text-center mb-6 tracking-tight">
@@ -98,13 +105,22 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            className="input input-bordered w-full rounded-xl"
-            placeholder="Password"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-          />
+        <div className="relative">
+  <input
+    type={showPass ? "text" : "password"}
+    className="input input-bordered w-full rounded-xl pr-10"
+    placeholder="Password"
+    value={pass}
+    onChange={(e) => setPass(e.target.value)}
+  />
+  <span
+    onClick={toggleShowPass}
+    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500"
+  >
+    {showPass ? <EyeOff size={20} /> : <Eye size={20} />}
+  </span>
+</div>
+
         </div>
 
         <div className="flex flex-col gap-3 mt-6">
