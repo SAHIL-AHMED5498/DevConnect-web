@@ -11,8 +11,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const [email, setEmail] = useState("test1@gmail.com");
-  const [pass, setPass] = useState("Test1@123");
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [isUser, setIsUser] = useState(true);
@@ -26,8 +26,8 @@ const Login = () => {
   const handleGuestLogin = async () => {
     try {
       const res = await axios.post(`${BASE_URL}/signIn`, {
-        email: "GUEST@gmail.com",
-        password: "Guest@123"
+        email: "test1@gmail.com",
+        password: "Test1@123"
       }, { withCredentials: true });
       dispatch(addUser(res.data));
       toast.success("Logged in as Guest");
