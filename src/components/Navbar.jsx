@@ -103,14 +103,14 @@ const Navbar = () => {
         <li>
           <Link to={"/profile"} className="justify-between">
             Profile
-            <span className="badge">New</span>
+           
           </Link>
         </li>
 
          <li>
           <Link to={""} onClick={handleChat} className="justify-between">
             Chats
-            <span className="badge">New</span>
+            <span className="badge text-amber-500 bg-amber-50">New</span>
           </Link>
         </li>
 
